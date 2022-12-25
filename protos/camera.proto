@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+service CameraService {
+    rpc StreamFrames(StreamFramesRequest) returns (stream CameraFrame) {}
+}
+
+message StreamFramesRequest {}
+
+message ImageSize {
+    int32 height = 1;
+    int32 width = 2;
+}
+
+message CameraFrame {
+    bytes data = 1;
+    int64 frame_number = 2;
+    string encoding_type = 3;
+    ImageSize  image_size = 4;
+    double stamp = 5;
+}
