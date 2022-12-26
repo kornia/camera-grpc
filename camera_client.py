@@ -15,16 +15,17 @@ def decode_frame(data: bytes) -> np.ndarray:
         np.frombuffer(data, dtype="uint8"), cv2.IMREAD_UNCHANGED)
 
 
-async def main(address: str, port: int, window_name: str):
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+async def main(address: str, port: int):
+    cv2.namedWindow("image", cv2.WINDOW_NORMAL)
     async with grpc.aio.insecure_channel(f"{address}:{port}") as channel:
         stub = camera_pb2_grpc.CameraServiceStub(channel)
-        request = camera_pb2.StreamFramesRequest()
+        request = camera_pb2.StreamFramesRequest(
+            camera_id=0, fps=40)
         response_iterator = stub.StreamFrames(request)
         async for msg in response_iterator:
             print(f"Stamp: {msg.stamp}\nFrame num: {msg.frame_number}")
             img: np.ndarray = decode_frame(msg.image_data)
-            cv2.imshow(window_name, img)
+            cv2.imshow("image", img)
             cv2.waitKey(1)
 
 
@@ -33,6 +34,5 @@ if __name__ == '__main__':
 
     address: str = "localhost"
     port: int = 50051
-    window_name: str = "image"
 
-    asyncio.run(main(address, port, window_name))
+    asyncio.run(main(address, port))

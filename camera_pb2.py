@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63\x61mera.proto\"\x15\n\x13StreamFramesRequest\"*\n\tImageSize\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\"}\n\x0b\x43\x61meraFrame\x12\x12\n\nimage_data\x18\x01 \x01(\x0c\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x03\x12\x15\n\rencoding_type\x18\x03 \x01(\t\x12\x1e\n\nimage_size\x18\x04 \x01(\x0b\x32\n.ImageSize\x12\r\n\x05stamp\x18\x05 \x01(\x01\x32G\n\rCameraService\x12\x36\n\x0cStreamFrames\x12\x14.StreamFramesRequest\x1a\x0c.CameraFrame\"\x00\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63\x61mera.proto\"5\n\x13StreamFramesRequest\x12\x11\n\tcamera_id\x18\x01 \x01(\x05\x12\x0b\n\x03\x66ps\x18\x02 \x01(\x05\"*\n\tImageSize\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\"}\n\x0b\x43\x61meraFrame\x12\x12\n\nimage_data\x18\x01 \x01(\x0c\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x03\x12\x15\n\rencoding_type\x18\x03 \x01(\t\x12\x1e\n\nimage_size\x18\x04 \x01(\x0b\x32\n.ImageSize\x12\r\n\x05stamp\x18\x05 \x01(\x01\x32G\n\rCameraService\x12\x36\n\x0cStreamFrames\x12\x14.StreamFramesRequest\x1a\x0c.CameraFrame\"\x00\x30\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'camera_pb2', globals())
@@ -21,11 +21,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   _STREAMFRAMESREQUEST._serialized_start=16
-  _STREAMFRAMESREQUEST._serialized_end=37
-  _IMAGESIZE._serialized_start=39
-  _IMAGESIZE._serialized_end=81
-  _CAMERAFRAME._serialized_start=83
-  _CAMERAFRAME._serialized_end=208
-  _CAMERASERVICE._serialized_start=210
-  _CAMERASERVICE._serialized_end=281
+  _STREAMFRAMESREQUEST._serialized_end=69
+  _IMAGESIZE._serialized_start=71
+  _IMAGESIZE._serialized_end=113
+  _CAMERAFRAME._serialized_start=115
+  _CAMERAFRAME._serialized_end=240
+  _CAMERASERVICE._serialized_start=242
+  _CAMERASERVICE._serialized_end=313
 # @@protoc_insertion_point(module_scope)
