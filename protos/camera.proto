@@ -12,7 +12,7 @@ message ImageSize {
 }
 
 message CameraFrame {
-    bytes data = 1;
+    bytes image_data = 1;
     int64 frame_number = 2;
     string encoding_type = 3;
     ImageSize  image_size = 4;

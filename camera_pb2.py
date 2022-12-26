@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63\x61mera.proto\"\x15\n\x13StreamFramesRequest\"*\n\tImageSize\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\"w\n\x0b\x43\x61meraFrame\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x03\x12\x15\n\rencoding_type\x18\x03 \x01(\t\x12\x1e\n\nimage_size\x18\x04 \x01(\x0b\x32\n.ImageSize\x12\r\n\x05stamp\x18\x05 \x01(\x01\x32G\n\rCameraService\x12\x36\n\x0cStreamFrames\x12\x14.StreamFramesRequest\x1a\x0c.CameraFrame\"\x00\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63\x61mera.proto\"\x15\n\x13StreamFramesRequest\"*\n\tImageSize\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\"}\n\x0b\x43\x61meraFrame\x12\x12\n\nimage_data\x18\x01 \x01(\x0c\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x03\x12\x15\n\rencoding_type\x18\x03 \x01(\t\x12\x1e\n\nimage_size\x18\x04 \x01(\x0b\x32\n.ImageSize\x12\r\n\x05stamp\x18\x05 \x01(\x01\x32G\n\rCameraService\x12\x36\n\x0cStreamFrames\x12\x14.StreamFramesRequest\x1a\x0c.CameraFrame\"\x00\x30\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'camera_pb2', globals())
@@ -25,7 +25,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _IMAGESIZE._serialized_start=39
   _IMAGESIZE._serialized_end=81
   _CAMERAFRAME._serialized_start=83
-  _CAMERAFRAME._serialized_end=202
-  _CAMERASERVICE._serialized_start=204
-  _CAMERASERVICE._serialized_end=275
+  _CAMERAFRAME._serialized_end=208
+  _CAMERASERVICE._serialized_start=210
+  _CAMERASERVICE._serialized_end=281
 # @@protoc_insertion_point(module_scope)

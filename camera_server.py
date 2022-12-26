@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import time
-from typing import Iterable
+from typing import Iterable, Optional
 import cv2
 
 import grpc
@@ -10,16 +10,27 @@ import camera_pb2
 import camera_pb2_grpc
 
 
-class CamerServer(camera_pb2_grpc.CameraServiceServicer):
+class CameraServer(camera_pb2_grpc.CameraServiceServicer):
     """Provides methods that implement functionality of route guide server."""
 
-    def __init__(self) -> None:
-        self.grabber = cv2.VideoCapture(0)
-        self._frame_counter: int = 0
+    def __init__(self, fps: int) -> None:
+        self.grabber: Optional[cv2.VideoCapture] = None
 
-    def StreamFrames(
-        self, request: camera_pb2.StreamFramesRequest, context: grpc.ServicerContext
+        self._frame_counter: int = 0
+        self._fps_in_seconds: float = 1 / fps
+
+    async def StreamFrames(
+        self, request: camera_pb2.StreamFramesRequest, context: grpc.aio.ServicerContext
     ) -> Iterable[camera_pb2.CameraFrame]:
+
+        def stop_grabber(context):
+            self.grabber.release()
+            self.grabber = None
+
+        context.add_done_callback(stop_grabber)
+
+        self.grabber = cv2.VideoCapture(0)
+
         while True:
             ret, frame = self.grabber.read()
             if not ret:
@@ -28,7 +39,7 @@ class CamerServer(camera_pb2_grpc.CameraServiceServicer):
             if not succeded:
                 continue
             yield camera_pb2.CameraFrame(
-                data=frame_encoded.tobytes(),
+                image_data=frame_encoded.tobytes(),
                 frame_number=self._frame_counter,
                 encoding_type="jpg",
                 image_size=camera_pb2.ImageSize(
@@ -38,12 +49,13 @@ class CamerServer(camera_pb2_grpc.CameraServiceServicer):
                 stamp=time.monotonic()
             )
             self._frame_counter += 1
+            time.sleep(self._fps_in_seconds)
 
 
-async def serve(port: int) -> None:
+async def serve(fps: int, port: int) -> None:
     server = grpc.aio.server()
     camera_pb2_grpc.add_CameraServiceServicer_to_server(
-        CamerServer(), server)
+        CameraServer(fps), server)
     server.add_insecure_port(f"[::]:{port}")
     await server.start()
     await server.wait_for_termination()
@@ -52,4 +64,5 @@ async def serve(port: int) -> None:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     port: int = 50051
-    asyncio.get_event_loop().run_until_complete(serve(port))
+    fps: int = 40
+    asyncio.run(serve(fps, port))
