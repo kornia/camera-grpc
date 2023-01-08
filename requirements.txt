@@ -1,3 +1,4 @@
 grpcio-tools
 protobuf
 opencv-python
+kornia-rs>=0.0.8

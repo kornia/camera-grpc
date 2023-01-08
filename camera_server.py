@@ -2,7 +2,9 @@
 import asyncio
 import logging
 import time
-from typing import Iterable, Optional
+from typing import Iterable, Optional, List
+
+import kornia_rs as K
 import cv2
 
 import grpc
@@ -15,6 +17,7 @@ class CameraServer(camera_pb2_grpc.CameraServiceServicer):
 
     def __init__(self) -> None:
         self.grabber: Optional[cv2.VideoCapture] = None
+        self.encoder = K.ImageEncoder()
 
         self._frame_counter: int = 0
 
@@ -35,13 +38,11 @@ class CameraServer(camera_pb2_grpc.CameraServiceServicer):
             ret, frame = self.grabber.read()
             if not ret:
                 continue
-            succeded, frame_encoded = cv2.imencode(".jpg", frame)
-            if not succeded:
-                continue
+            frame_encoded: List[int] = self.encoder.encode(frame.tobytes(), frame.shape)
             yield camera_pb2.CameraFrame(
-                image_data=frame_encoded.tobytes(),
+                image_data=bytes(frame_encoded),
                 frame_number=self._frame_counter,
-                encoding_type="jpg",
+                encoding_type="jpeg",
                 image_size=camera_pb2.ImageSize(
                     height=frame.shape[0],
                     width=frame.shape[1]

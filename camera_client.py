@@ -3,6 +3,7 @@ import asyncio
 
 import cv2
 import numpy as np
+import kornia_rs as K
 
 import grpc
 
@@ -10,13 +11,12 @@ import camera_pb2
 import camera_pb2_grpc
 
 
-def decode_frame(data: bytes) -> np.ndarray:
-    return cv2.imdecode(
-        np.frombuffer(data, dtype="uint8"), cv2.IMREAD_UNCHANGED)
+def decode_frame(decoder: K.ImageDecoder, data: bytes) -> np.ndarray:
+    return np.from_dlpack(decoder.decode(data))
 
 
 async def main(address: str, port: int):
-    cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+    decoder = K.ImageDecoder()
     async with grpc.aio.insecure_channel(f"{address}:{port}") as channel:
         stub = camera_pb2_grpc.CameraServiceStub(channel)
         request = camera_pb2.StreamFramesRequest(
@@ -24,7 +24,13 @@ async def main(address: str, port: int):
         response_iterator = stub.StreamFrames(request)
         async for msg in response_iterator:
             print(f"Stamp: {msg.stamp}\nFrame num: {msg.frame_number}")
-            img: np.ndarray = decode_frame(msg.image_data)
+
+            # await for blocking decoder function
+            img: np.ndarray = await asyncio.get_running_loop().run_in_executor(
+                None, lambda: decode_frame(decoder, msg.image_data))
+
+            # visualize with opencv
+            cv2.namedWindow("image", cv2.WINDOW_NORMAL)
             cv2.imshow("image", img)
             cv2.waitKey(1)
 
